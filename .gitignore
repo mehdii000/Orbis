@@ -18,5 +18,4 @@
 
 # Golang
 vendor/
-*.mod
 *.sum
