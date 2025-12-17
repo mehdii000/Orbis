@@ -1,56 +1,45 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
+	"bufio"
+	"context"
 	"fmt"
-	"io"
-	"net/http"
+	"log"
+	"orbis/abstractions/ollama"
+	"orbis/abstractions/prettifier"
+	"os"
 )
-
-const OLLAMA_URL string = "http://localhost:11434/api/generate"
-const MODEL string = "qwen2.5-coder"
 
 func main() {
 
-	// Prepare JSON request body
-	requestBody := map[string]any{
-		"model":  MODEL,
-		"prompt": "tell me a joke.",
-		"stream": false,
+	client := ollama.NewClient()
+
+	var input string
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Print("Prompt: ")
+	if scanner.Scan() {
+		input = scanner.Text()
 	}
 
-	jsonData, err := json.Marshal(requestBody)
+	fileCont, err := os.ReadFile("prompt_list_project_directories.txt")
+	if err != nil {
+		return
+	}
+
+	finalPrompt := fmt.Sprintf(string(fileCont), input)
+
+	response, err := client.Generate(
+		context.Background(),
+		finalPrompt,
+	)
 	if err != nil {
 		panic(err)
 	}
 
-	// Send POST request
-	res, err := http.Post(OLLAMA_URL, "application/json", bytes.NewBuffer(jsonData))
-	if err != nil {
-		panic(err)
+	data := []byte(response)
+
+	errr := prettifier.PrintProjectTree(data)
+	if errr != nil {
+		log.Fatal(err)
 	}
-	defer res.Body.Close()
-
-	// Read response
-	responseBytes, err := io.ReadAll(res.Body)
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println("Response status:", res.Status)
-
-	// Parse JSON response
-	var responseMap map[string]interface{}
-	if err := json.Unmarshal(responseBytes, &responseMap); err != nil {
-		panic(err)
-	}
-
-	// Access the "response" field
-	if val, ok := responseMap["response"]; ok {
-		fmt.Println("Response:", val)
-	} else {
-		fmt.Println("Field 'response' not found in JSON")
-	}
-
 }
