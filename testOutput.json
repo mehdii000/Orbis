@@ -1,0 +1,440 @@
+{
+  "project": {
+    "language": "JavaScript",
+    "framework": "React",
+    "description": "A full-stack web application for a food cooking website using React as the frontend framework."
+  },
+  "conventions": {
+    "naming": {
+      "components": "PascalCase (e.g., RecipeCard.jsx)",
+      "functions": "camelCase (e.g., fetchRecipes)",
+      "variables": "camelCase (e.g., recipeList)",
+      "files": "PascalCase for components, camelCase for utilities"
+    },
+    "patterns": [
+      "Components in src/components/",
+      "One component per file",
+      "Co-locate styles with components",
+      "Utility functions in src/utils/ if applicable",
+      "API calls and state management in src/store/"
+    ]
+  },
+  "generation_order": [
+    "src/store/actions/recipeActions.js",
+    "src/store/reducers/recipeReducer.js",
+    "src/store/index.js",
+    "src/components/Header.jsx",
+    "src/components/Footer.jsx",
+    "src/components/SearchBar.jsx",
+    "src/components/RecipeCard.jsx",
+    "src/components/Modal.jsx",
+    "src/pages/Home.jsx",
+    "src/pages/Recipes.jsx",
+    "src/pages/SingleRecipe.jsx",
+    "src/pages/About.jsx",
+    "src/pages/Contact.jsx",
+    "src/App.jsx",
+    "src/index.js"
+  ],
+  "files": {
+    "src/store/actions/recipeActions.js": {
+      "purpose": "Handles actions related to recipes (fetch, add, update, delete)",
+      "type": "action",
+      "priority": 1,
+      "exports": ["fetchRecipes", "addRecipe", "updateRecipe", "deleteRecipe"],
+      "imports": [],
+      "depends_on": [],
+      "used_by": [
+        "src/store/reducers/recipeReducer.js"
+      ],
+      "related_files": [],
+      "dependencies": [],
+      "notes": [
+        "Export as named exports, not default",
+        "Functions should return action objects with type and payload"
+      ]
+    },
+    "src/store/reducers/recipeReducer.js": {
+      "purpose": "Handles state changes for recipes based on actions",
+      "type": "reducer",
+      "priority": 1,
+      "exports": ["default"],
+      "imports": [
+        {
+          "from": "../actions/recipeActions.js",
+          "items": ["fetchRecipes", "addRecipe", "updateRecipe", "deleteRecipe"]
+        }
+      ],
+      "depends_on": [
+        "src/store/actions/recipeActions.js"
+      ],
+      "used_by": [
+        "src/store/index.js"
+      ],
+      "related_files": [],
+      "dependencies": [],
+      "notes": [
+        "Use switch statement to handle different action types",
+        "Maintain initial state and return new state based on actions"
+      ]
+    },
+    "src/store/index.js": {
+      "purpose": "Sets up the Redux store with reducers and middleware",
+      "type": "config",
+      "priority": 2,
+      "exports": ["store"],
+      "imports": [
+        {
+          "from": "redux",
+          "items": ["createStore", "combineReducers"]
+        },
+        {
+          "from": "./reducers/recipeReducer.js",
+          "items": ["default as recipeReducer"]
+        }
+      ],
+      "depends_on": [
+        "src/store/actions/recipeActions.js",
+        "src/store/reducers/recipeReducer.js"
+      ],
+      "used_by": [],
+      "related_files": [],
+      "dependencies": ["redux"],
+      "notes": [
+        "Combine reducers and create store with middleware if needed"
+      ]
+    },
+    "src/components/Header.jsx": {
+      "purpose": "Displays the header of the application",
+      "type": "component",
+      "priority": 3,
+      "exports": ["Header"],
+      "imports": [
+        {
+          "from": "react",
+          "items": ["useState", "useEffect"]
+        }
+      ],
+      "depends_on": [],
+      "used_by": [
+        "src/App.jsx"
+      ],
+      "related_files": [
+        "src/components/Header.css"
+      ],
+      "dependencies": ["react"],
+      "notes": [
+        "Default export the Header component",
+        "Keep simple, just render header elements"
+      ]
+    },
+    "src/components/Footer.jsx": {
+      "purpose": "Displays the footer of the application",
+      "type": "component",
+      "priority": 3,
+      "exports": ["Footer"],
+      "imports": [
+        {
+          "from": "react",
+          "items": []
+        }
+      ],
+      "depends_on": [],
+      "used_by": [
+        "src/App.jsx"
+      ],
+      "related_files": [
+        "src/components/Footer.css"
+      ],
+      "dependencies": ["react"],
+      "notes": [
+        "Default export the Footer component",
+        "Keep simple, just render footer elements"
+      ]
+    },
+    "src/components/SearchBar.jsx": {
+      "purpose": "Handles search functionality",
+      "type": "component",
+      "priority": 3,
+      "exports": ["SearchBar"],
+      "imports": [
+        {
+          "from": "react",
+          "items": ["useState"]
+        }
+      ],
+      "depends_on": [],
+      "used_by": [
+        "src/pages/Recipes.jsx"
+      ],
+      "related_files": [],
+      "dependencies": ["react"],
+      "notes": [
+        "Default export the SearchBar component",
+        "Keep simple, just render input and handle search logic"
+      ]
+    },
+    "src/components/RecipeCard.jsx": {
+      "purpose": "Displays individual recipe with image, name, ingredients, etc.",
+      "type": "component",
+      "priority": 3,
+      "exports": ["RecipeCard"],
+      "imports": [
+        {
+          "from": "react",
+          "items": []
+        }
+      ],
+      "depends_on": [],
+      "used_by": [
+        "src/pages/Recipes.jsx"
+      ],
+      "related_files": [
+        "src/components/RecipeCard.css"
+      ],
+      "dependencies": ["react"],
+      "notes": [
+        "Default export the RecipeCard component",
+        "Keep simple, just render recipe details"
+      ]
+    },
+    "src/components/Modal.jsx": {
+      "purpose": "Displays a modal for additional information or actions",
+      "type": "component",
+      "priority": 3,
+      "exports": ["Modal"],
+      "imports": [
+        {
+          "from": "react",
+          "items": []
+        }
+      ],
+      "depends_on": [],
+      "used_by": [
+        "src/components/RecipeCard.jsx"
+      ],
+      "related_files": [
+        "src/components/Modal.css"
+      ],
+      "dependencies": ["react"],
+      "notes": [
+        "Default export the Modal component",
+        "Keep simple, just render modal elements and logic"
+      ]
+    },
+    "src/pages/Home.jsx": {
+      "purpose": "Home page with welcome message and links to other pages",
+      "type": "page",
+      "priority": 4,
+      "exports": ["Home"],
+      "imports": [
+        {
+          "from": "react",
+          "items": []
+        }
+      ],
+      "depends_on": [],
+      "used_by": [
+        "src/App.jsx"
+      ],
+      "related_files": [],
+      "dependencies": ["react"],
+      "notes": [
+        "Default export the Home component",
+        "Keep simple, just render home page elements"
+      ]
+    },
+    "src/pages/Recipes.jsx": {
+      "purpose": "Page to display a list of recipes with search functionality",
+      "type": "page",
+      "priority": 4,
+      "exports": ["Recipes"],
+      "imports": [
+        {
+          "from": "react",
+          "items": ["useState", "useEffect"]
+        },
+        {
+          "from": "../components/SearchBar.jsx",
+          "items": ["SearchBar"]
+        },
+        {
+          "from": "../components/RecipeCard.jsx",
+          "items": ["RecipeCard"]
+        }
+      ],
+      "depends_on": [
+        "src/components/SearchBar.jsx",
+        "src/components/RecipeCard.jsx"
+      ],
+      "used_by": [
+        "src/App.jsx"
+      ],
+      "related_files": [],
+      "dependencies": ["react"],
+      "notes": [
+        "Fetch recipes on mount using useEffect",
+        "Handle search and display filtered recipes",
+        "Default export the Recipes component"
+      ]
+    },
+    "src/pages/SingleRecipe.jsx": {
+      "purpose": "Page to display details of a single recipe",
+      "type": "page",
+      "priority": 4,
+      "exports": ["SingleRecipe"],
+      "imports": [
+        {
+          "from": "react",
+          "items": []
+        }
+      ],
+      "depends_on": [],
+      "used_by": [
+        "src/App.jsx"
+      ],
+      "related_files": [],
+      "dependencies": ["react"],
+      "notes": [
+        "Default export the SingleRecipe component",
+        "Keep simple, just render recipe details"
+      ]
+    },
+    "src/pages/About.jsx": {
+      "purpose": "Page with information about the cooking website",
+      "type": "page",
+      "priority": 4,
+      "exports": ["About"],
+      "imports": [
+        {
+          "from": "react",
+          "items": []
+        }
+      ],
+      "depends_on": [],
+      "used_by": [
+        "src/App.jsx"
+      ],
+      "related_files": [],
+      "dependencies": ["react"],
+      "notes": [
+        "Default export the About component",
+        "Keep simple, just render about page elements"
+      ]
+    },
+    "src/pages/Contact.jsx": {
+      "purpose": "Page with contact information and form for feedback",
+      "type": "page",
+      "priority": 4,
+      "exports": ["Contact"],
+      "imports": [
+        {
+          "from": "react",
+          "items": []
+        }
+      ],
+      "depends_on": [],
+      "used_by": [
+        "src/App.jsx"
+      ],
+      "related_files": [],
+      "dependencies": ["react"],
+      "notes": [
+        "Default export the Contact component",
+        "Keep simple, just render contact page elements and form"
+      ]
+    },
+    "src/App.jsx": {
+      "purpose": "Root component that renders other components and pages",
+      "type": "entry",
+      "priority": 5,
+      "exports": ["App"],
+      "imports": [
+        {
+          "from": "react",
+          "items": []
+        },
+        {
+          "from": "./components/Header.jsx",
+          "items": ["Header"]
+        },
+        {
+          "from": "./components/Footer.jsx",
+          "items": ["Footer"]
+        },
+        {
+          "from": "./pages/Home.jsx",
+          "items": ["Home"]
+        },
+        {
+          "from": "./pages/Recipes.jsx",
+          "items": ["Recipes"]
+        },
+        {
+          "from": "./pages/SingleRecipe.jsx",
+          "items": ["SingleRecipe"]
+        },
+        {
+          "from": "./pages/About.jsx",
+          "items": ["About"]
+        },
+        {
+          "from": "./pages/Contact.jsx",
+          "items": ["Contact"]
+        }
+      ],
+      "depends_on": [
+        "src/components/Header.jsx",
+        "src/components/Footer.jsx",
+        "src/pages/Home.jsx",
+        "src/pages/Recipes.jsx",
+        "src/pages/SingleRecipe.jsx",
+        "src/pages/About.jsx",
+        "src/pages/Contact.jsx"
+      ],
+      "used_by": [],
+      "related_files": [
+        "src/App.css"
+      ],
+      "dependencies": ["react"],
+      "notes": [
+        "Default export the App component",
+        "Keep simple, just render header, footer and pages based on route"
+      ]
+    },
+    "src/index.js": {
+      "purpose": "Entry point that mounts React app to DOM",
+      "type": "entry",
+      "priority": 6,
+      "exports": [],
+      "imports": [
+        {
+          "from": "react",
+          "items": []
+        },
+        
+        {
+          "from": "react-dom/client",
+          "items": ["createRoot"]
+        },
+        {
+          "from": "./App.jsx",
+          "items": ["App"]
+        }
+      ],
+      "depends_on": [
+        "src/App.jsx"
+      ],
+      "used_by": [],
+      "related_files": [
+        "public/index.html"
+      ],
+      "dependencies": ["react", "react-dom"],
+      "notes": [
+        "Use createRoot from React 18",
+        "Mount to element with id 'root'",
+        "No exports, just side effects"
+      ]
+    }
+  }
+}

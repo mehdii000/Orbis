@@ -10,6 +10,7 @@
 
 # Output of the go tool, specifically a binary (or object file)
 *.out
+project/
 
 # Editor directories and files
 .idea/

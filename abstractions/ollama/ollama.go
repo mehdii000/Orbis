@@ -5,7 +5,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -23,7 +25,7 @@ type Client struct {
 func NewClient() *Client {
 	return &Client{
 		http: &http.Client{
-			Timeout: 30 * time.Second,
+			Timeout: 5 * time.Minute, // FIXED: Increased from 30s to 5min for LLM generation
 		},
 		url:   defaultURL,
 		model: defaultModel,
@@ -79,4 +81,20 @@ func (c *Client) Generate(ctx context.Context, prompt string) (string, error) {
 	}
 
 	return out.Response, nil
+}
+
+func (c *Client) GenerateFromFile(filename string, inputs ...string) string {
+	fileCont, err := os.ReadFile(filename)
+	if err != nil {
+		panic("Error reading file: " + err.Error())
+	}
+
+	finalPrompt := fmt.Sprintf(string(fileCont), inputs)
+
+	response, err := c.Generate(context.Background(), finalPrompt)
+	if err != nil {
+		panic("Error generating response: " + err.Error())
+	}
+
+	return response
 }
